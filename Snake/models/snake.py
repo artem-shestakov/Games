@@ -7,7 +7,7 @@ class Snake():
     def __init__(self, body_size):
         self.size = body_size
         self.body = [Vector2(5,10),Vector2(4,10),Vector2(3,10)]
-        self.direction = Vector2(1,0)
+        self.direction = Vector2(0,0)
         self.is_grow = False
 
         # Head
@@ -77,15 +77,20 @@ class Snake():
         elif tail_direction == Vector2(0,-1): self.tail = self.tail_down
 
     def move(self):
-        if self.is_grow:
-            body_clone = self.body[:]
-            body_clone.insert(0,body_clone[0] + self.direction)
-            self.body = body_clone
-            self.is_grow = False
-        else:
-            body_clone = self.body[:-1]
-            body_clone.insert(0,body_clone[0] + self.direction)
-            self.body = body_clone
+        if self.direction != Vector2(0,0):
+            if self.is_grow:
+                body_clone = self.body[:]
+                body_clone.insert(0,body_clone[0] + self.direction)
+                self.body = body_clone
+                self.is_grow = False
+            else:
+                body_clone = self.body[:-1]
+                body_clone.insert(0,body_clone[0] + self.direction)
+                self.body = body_clone
 
     def grow(self):
         self.is_grow = True
+
+    def restart(self):
+        self.body = [Vector2(5,10),Vector2(4,10),Vector2(3,10)]
+        self.direction = Vector2(0,0)

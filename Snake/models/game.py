@@ -17,7 +17,30 @@ class Game():
         self.if_hit_fruit()
         self.is_fail()
 
+    def draw_bg(self):
+        grass_clr = (167,209,61)
+        for row in range(self.display_size):
+            if row % 2 == 0:
+                for col in range(self.display_size):
+                    if col % 2 == 0:
+                        grass_rect = pygame.Rect(
+                            col * self.sector_size,
+                            row * self.sector_size,
+                            self.sector_size, self.sector_size
+                        )
+                        pygame.draw.rect(self.surface, grass_clr, grass_rect)
+            else:
+                for col in range(self.display_size):
+                    if col % 2 != 0:
+                        grass_rect = pygame.Rect(
+                            col * self.sector_size,
+                            row * self.sector_size,
+                            self.sector_size, self.sector_size
+                        )
+                        pygame.draw.rect(self.surface, grass_clr, grass_rect)
+
     def draw_models(self):
+        self.draw_bg()
         self.fruit.draw(self.surface)
         self.snake.draw_body(self.surface)
         self.draw_score()
@@ -48,6 +71,10 @@ class Game():
         self.surface.blit(score_surface, score_rect)
         self.surface.blit(self.fruit.apple, fruit_rect)
 
+    def restart(self):
+        self.snake.restart()
+        self.fruit.recreate(self.display_size)
+        self.score = 0
+
     def game_over(self):
-        pygame.quit()
-        sys.exit(0)
+        self.restart()

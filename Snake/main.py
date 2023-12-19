@@ -37,7 +37,7 @@ while True:
                 if game.snake.direction.x != -1:
                     game.snake.direction = Vector2(1,0)
             if event.key == pygame.K_LEFT:
-                if game.snake.direction.x != 1:
+                if game.snake.direction.x != 1 and game.snake.direction != Vector2(0,0):
                     game.snake.direction = Vector2(-1,0)
 
     display.fill((175,215,70))
