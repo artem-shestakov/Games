@@ -7,6 +7,7 @@ SECTOR = 40
 SECTOR_COUNT=20
 WIDTH = HEIGHT = SECTOR * SECTOR_COUNT
 
+pygame.mixer.pre_init()
 pygame.init()
 display = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
