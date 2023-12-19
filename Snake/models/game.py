@@ -27,6 +27,7 @@ class Game():
             self.fruit.recreate(self.display_size)
             self.snake.grow()
             self.score += 1
+            self.snake.play_crunch()
 
     def is_fail(self):
         if not 0 <= self.snake.body[0].x < self.display_size or not 0 <= self.snake.body[0].y < self.display_size:

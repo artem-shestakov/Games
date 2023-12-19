@@ -26,6 +26,9 @@ class Snake():
         self.body_tr = pygame.image.load('sprites/body_tr.png').convert_alpha()
         self.body_horizontal = pygame.image.load('sprites/body_horizontal.png').convert_alpha()
         self.body_vertical = pygame.image.load('sprites/body_vertical.png').convert_alpha()
+
+        # Sounds
+        self.crunch_sound = pygame.mixer.Sound('sounds/crunch.wav')
     
     def draw_body(self, surface: pygame.Surface):
         self.set_head_graphics()
@@ -55,6 +58,8 @@ class Snake():
                     else:
                         surface.blit(self.body_br, rect)
 
+    def play_crunch(self):
+        self.crunch_sound.play()
 
     def set_head_graphics(self):
         head_direction = self.body[1] - self.body[0]
