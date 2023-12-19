@@ -7,7 +7,8 @@ class Snake():
     def __init__(self, body_size):
         self.size = body_size
         self.body = [Vector2(5,10),Vector2(4,10),Vector2(3,10)]
-        self.direction = Vector2(1,0)
+        self.direction = Vector2(0,0)
+        self.is_grow = False
 
         # Head
         self.head_up = pygame.image.load('sprites/head_up.png').convert_alpha()
@@ -26,16 +27,70 @@ class Snake():
         self.body_tr = pygame.image.load('sprites/body_tr.png').convert_alpha()
         self.body_horizontal = pygame.image.load('sprites/body_horizontal.png').convert_alpha()
         self.body_vertical = pygame.image.load('sprites/body_vertical.png').convert_alpha()
+
+        # Sounds
+        self.crunch_sound = pygame.mixer.Sound('sounds/crunch.wav')
     
-    def draw_body(self, surface):
-        for block in self.body:
+    def draw_body(self, surface: pygame.Surface):
+        self.set_head_graphics()
+        self.set_tail_graphics()
+
+        for index, block in enumerate(self.body):
             rect = Rect(block.x * self.size, block.y * self.size, self.size, self.size)
-            pygame.draw.rect(surface, (0,225,0), rect)
+            
+            if index == 0:
+                surface.blit(self.head,rect)
+            elif index == len(self.body) - 1:
+                surface.blit(self.tail,rect)
+            else:
+                prev_block_vector = self.body[index+1] - block
+                next_block_vector = self.body[index-1] - block
+                if next_block_vector.x == prev_block_vector.x:
+                    surface.blit(self.body_vertical, rect)
+                elif next_block_vector.y == prev_block_vector.y:
+                    surface.blit(self.body_horizontal, rect)
+                else:
+                    if prev_block_vector.x == -1 and next_block_vector.y == -1 or prev_block_vector.y == -1 and next_block_vector.x == -1:
+                        surface.blit(self.body_tl, rect)
+                    elif prev_block_vector.y == -1 and next_block_vector.x == 1 or prev_block_vector.x == 1 and next_block_vector.y == -1:
+                        surface.blit(self.body_tr, rect)
+                    elif prev_block_vector.y == 1 and next_block_vector.x == -1 or prev_block_vector.x == -1 and next_block_vector.y == 1:
+                        surface.blit(self.body_bl, rect)
+                    else:
+                        surface.blit(self.body_br, rect)
+
+    def play_crunch(self):
+        self.crunch_sound.play()
+
+    def set_head_graphics(self):
+        head_direction = self.body[1] - self.body[0]
+        if head_direction == Vector2(1,0): self.head = self.head_left
+        elif head_direction == Vector2(-1,0): self.head = self.head_right
+        elif head_direction == Vector2(0,1): self.head = self.head_up
+        elif head_direction == Vector2(0,-1): self.head = self.head_down
+
+    def set_tail_graphics(self):
+        tail_direction = self.body[-2] - self.body[-1]
+        if tail_direction == Vector2(1,0): self.tail = self.tail_left
+        elif tail_direction == Vector2(-1,0): self.tail = self.tail_right
+        elif tail_direction == Vector2(0,1): self.tail = self.tail_up
+        elif tail_direction == Vector2(0,-1): self.tail = self.tail_down
 
     def move(self):
-        body_clone = self.body[:-1]
-        body_clone.insert(0,body_clone[0] + self.direction)
-        self.body = body_clone
+        if self.direction != Vector2(0,0):
+            if self.is_grow:
+                body_clone = self.body[:]
+                body_clone.insert(0,body_clone[0] + self.direction)
+                self.body = body_clone
+                self.is_grow = False
+            else:
+                body_clone = self.body[:-1]
+                body_clone.insert(0,body_clone[0] + self.direction)
+                self.body = body_clone
 
     def grow(self):
-        self.body.append(self.body[-1])
+        self.is_grow = True
+
+    def restart(self):
+        self.body = [Vector2(5,10),Vector2(4,10),Vector2(3,10)]
+        self.direction = Vector2(0,0)

@@ -12,7 +12,6 @@ class Fruit:
     def draw(self, surface):
         rect = Rect(self.position.x * self.size, self.position.y * self.size,self.size,self.size)
         surface.blit(self.apple, rect)
-        #pygame.draw.rect(surface, (125,165,115), rect)
 
     def recreate(self, display_size):
         self.x = random.randint(0, display_size - 1)

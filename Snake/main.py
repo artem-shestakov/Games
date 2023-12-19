@@ -7,6 +7,7 @@ SECTOR = 40
 SECTOR_COUNT=20
 WIDTH = HEIGHT = SECTOR * SECTOR_COUNT
 
+pygame.mixer.pre_init()
 pygame.init()
 display = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
@@ -36,7 +37,7 @@ while True:
                 if game.snake.direction.x != -1:
                     game.snake.direction = Vector2(1,0)
             if event.key == pygame.K_LEFT:
-                if game.snake.direction.x != 1:
+                if game.snake.direction.x != 1 and game.snake.direction != Vector2(0,0):
                     game.snake.direction = Vector2(-1,0)
 
     display.fill((175,215,70))
