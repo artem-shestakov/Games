@@ -8,6 +8,7 @@ class Snake():
         self.size = body_size
         self.body = [Vector2(5,10),Vector2(4,10),Vector2(3,10)]
         self.direction = Vector2(1,0)
+        self.is_grow = False
 
         # Head
         self.head_up = pygame.image.load('sprites/head_up.png').convert_alpha()
@@ -76,9 +77,15 @@ class Snake():
         elif tail_direction == Vector2(0,-1): self.tail = self.tail_down
 
     def move(self):
-        body_clone = self.body[:-1]
-        body_clone.insert(0,body_clone[0] + self.direction)
-        self.body = body_clone
+        if self.is_grow:
+            body_clone = self.body[:]
+            body_clone.insert(0,body_clone[0] + self.direction)
+            self.body = body_clone
+            self.is_grow = False
+        else:
+            body_clone = self.body[:-1]
+            body_clone.insert(0,body_clone[0] + self.direction)
+            self.body = body_clone
 
     def grow(self):
-        self.body.append(self.body[-1])
+        self.is_grow = True
